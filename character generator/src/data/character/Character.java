@@ -21,8 +21,8 @@ public class Character {
     //Class Attribtues
     //Some attributes are defaulted to prevent nulls and to give the generator some "replace me" text.
     ///Required Input
-    private String name = "Snoop";
-    private String backstory = "I was born";
+    private String name = "Bad Company";
+    private String backstory = "I was born; a shotgun in my hands";
     private Gender gender = Gender.FEMALE;
     private int XP = 0;
     private int karma = 0;
@@ -42,7 +42,7 @@ public class Character {
      * all other values to be assigned by setters.
      * Namely for testing purposes and rapid-character generation.
      * @param name The character's Name
-     * @param SPECIAL The array of character statistics. Indexes = Statistic indexes, FYI.
+     * @param SPECIAL The array of character statistics. Indexes = Statistic.STATISTICNAME.index, FYI.
      */
     public Character(String name, int[] SPECIAL) {
         this.name = name;
@@ -180,18 +180,25 @@ public class Character {
         }
     }
 
+    public int calculateSkillPoints(){
+        return 5 + (2 * SPECIAL[Statistic.INTELLIGENCE.index]);
+    }
+
     public int calculateSkillCost(int score){
         if (score > 200) return 6;
         else if (score <= 200 && score > 175) return 5;
         else if (score <= 175 && score > 150) return 4;
         else if (score <= 150 && score > 125) return 3;
-        else if (score <= 125 && score > 100) return 5;
+        else if (score <= 125 && score > 100) return 2;
         else return 1;
     }
 
     public int calculateHitPoints(){
+        //calculate hp for any race
         int hp = 15 + (SPECIAL[Statistic.STRENGTH.index] + (2 * SPECIAL[Statistic.ENDURANCE.index]));
+        //add bonus if deathclaw or super mutant
         hp = hp + ((this.race == Race.DEATHCLAW || this.race == Race.SUPER_MUTANT)? 2 * calculateLevel():0);
+        //add bonus for each level
         hp = hp + (3 + (this.SPECIAL[Statistic.ENDURANCE.index]/2) * calculateLevel());
         return hp;
     }
@@ -281,7 +288,7 @@ public class Character {
         return gas;
     }
 
-    public int calculateElectricalDamage(){
+    public int calculateElectricalDamageResistance(){
         int elecDamage = 0;
         if (race == Race.HUMAN) elecDamage = 30;
         else if (race == Race.DOG) elecDamage = 50;
@@ -336,7 +343,7 @@ public class Character {
         String resistances = "=RESISTANCES==================\n";
         resistances = String.format("%sAC :%-8s|| DAM:%-9s||\nPOISON:%-5s|| GAS:%s/%-7s||\nElectric:%-3s|| RAD:%-9s||\n",
                 resistances,calculateArmorClass(),calculateDamageResistance(),calculatePoisonResistance(),
-                calculateGasResistance()[0],calculateGasResistance()[1], calculateElectricalDamage(), calculateRadiationResistance());
+                calculateGasResistance()[0],calculateGasResistance()[1], calculateElectricalDamageResistance(), calculateRadiationResistance());
 
         String inventory = "=INVENTORY====================\n";
         inventory = inventory + "(Carrying Weight = " + calculateCarryWeight() + ")\n";

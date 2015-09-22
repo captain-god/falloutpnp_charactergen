@@ -4,17 +4,30 @@ package data.character;
  * Created by doug on 9/4/2015.
  */
 public enum Perk {
-    YES("YES", "OH MY GOD", "+99 Luck");
+    ACTION_BOY("Action Boy (or Girl)", "Your character knows how to make the most out of every moment. For each rank of this perk, the character gets an additional Action Point each combat turn.",
+            2, "", "+1AP")
 
-
+    ;
     String name;
     String description;
     String shorthand;
+    String requirements;
+    int ranks;
 
-    Perk(String name, String desc, String shorthand){
+    Perk(String name, String desc, int ranks, String requirements, String shorthand){
         this.name = name;
         this.description = desc;
+        this.ranks = ranks;
         this.shorthand = shorthand;
+        this.requirements = requirements;
+    }
+
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public int getRanks() {
+        return ranks;
     }
 
     public String getName() {
