@@ -16,6 +16,13 @@ public class Character {
      */
     public enum Gender {
         MALE, FEMALE, OTHER, NONE
+        ;
+        @Override
+        public String toString(){
+            char[] c = name().toLowerCase().toCharArray();
+            c[0] = java.lang.Character.toUpperCase(c[0]);
+            return new String(c);
+        }
     }
 
     //Class Attribtues
@@ -36,6 +43,13 @@ public class Character {
     private ArrayList<Perk> perks = new ArrayList<Perk>();
 
     //the rest is calculated from input
+
+    /**
+     * Parameterless constructor for quickies.
+     */
+    public Character(){
+        calculateSkillScores();
+    }
 
     /**
      * Quickie-Character generator - takes all the required information and makes a character from that.
@@ -325,7 +339,7 @@ public class Character {
     public String toString(){
 
         String header = String.format("%-21s \nLevel %-2s %s %s\nCaps: %-23s\nXP: %-7s | HP: %-3s | AP: %-2s\nCrit Chance:%-2s | Sequence: %s\n",
-                name, calculateLevel(),race.name(),((gender==Gender.MALE || gender == Gender.FEMALE)?gender.toString():""),
+                name, calculateLevel(),race.getName(),((gender==Gender.MALE || gender == Gender.FEMALE)?gender.toString():""),
                 caps, XP, calculateHitPoints(), calculateActionPoints(), calculateCritChance(), calculateSequence());
 
         String special = "=SPECIAL======================\n";
@@ -337,7 +351,7 @@ public class Character {
         calculateSkillScores(); //recalculate
         String skillset = "=SKILLS=======================\n(* TAGGED SKILLS)           ||\n";
         for (HashMap.Entry<Skill, Integer> entry : skills.entrySet()){
-            skillset = skillset + String.format("%-19s %3s%-5s||\n",entry.getKey().getCommonName(), entry.getValue(),(tagSkills.contains(entry.getKey()) ? "(*)" : ""));
+            skillset = skillset + String.format("%-19s %3s%-5s||\n",entry.getKey().getName(), entry.getValue(),(tagSkills.contains(entry.getKey()) ? "(*)" : ""));
         }
 
         String resistances = "=RESISTANCES==================\n";

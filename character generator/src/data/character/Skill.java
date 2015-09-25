@@ -27,29 +27,29 @@ public enum Skill {
     GAMBLING("Gambling", 0, 5, Statistic.LUCK),
     OUTDOORSMAN("Outdoorsman", 0, 2, Statistic.ENDURANCE, Statistic.INTELLIGENCE);
 
-    String commonName;
+    String name;
     int base;
     int multiplier;
     Statistic primaryStat;
     Statistic secondaryStat = null;
 
-    Skill(String commonName, int base, int multiplier, Statistic primaryStat) {
-        this.commonName = commonName;
+    Skill(String name, int base, int multiplier, Statistic primaryStat) {
+        this.name = name;
         this.base = base;
         this.multiplier = multiplier;
         this.primaryStat = primaryStat;
     }
 
-    Skill(String commonName, int base, int multiplier, Statistic primaryStat, Statistic secondaryStat) {
-        this.commonName = commonName;
+    Skill(String name, int base, int multiplier, Statistic primaryStat, Statistic secondaryStat) {
+        this.name = name;
         this.base = base;
         this.multiplier = multiplier;
         this.primaryStat = primaryStat;
         this.secondaryStat = secondaryStat;
     }
 
-    public String getCommonName() {
-        return commonName;
+    public String getName() {
+        return name;
     }
 
     public int getBase() {
@@ -66,5 +66,10 @@ public enum Skill {
 
     public Statistic getSecondaryStat() {
         return secondaryStat;
+    }
+
+    @Override
+    public String toString(){
+        return this.name;
     }
 }

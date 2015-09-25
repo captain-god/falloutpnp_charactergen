@@ -1,7 +1,7 @@
 package data.character;
 
 /**
- * Created by doug on 9/4/2015.
+ * Perks in the game. God fucking help me.
  */
 public enum Perk {
     ACTION_BOY("Action Boy (or Girl)", "Your character knows how to make the most out of every moment. For each rank of this perk, the character gets an additional Action Point each combat turn.",
@@ -42,4 +42,8 @@ public enum Perk {
         return shorthand;
     }
 
+    @Override
+    public String toString(){
+        return this.name;
+    }
 }

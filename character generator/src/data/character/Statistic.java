@@ -17,4 +17,5 @@ public enum Statistic {
     Statistic(int i){
         this.index = i;
     }
+
 }

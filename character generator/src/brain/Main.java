@@ -1,6 +1,6 @@
 package brain;
 
-import ui.gui.Launcher;
+import gui.*;
 
 /**
  * The brains of the operation.
@@ -18,5 +18,7 @@ public class Main {
                 new Launcher();
             }
         }
+        //new Launcher();
+        new ShitLauncher();
     }
 }
