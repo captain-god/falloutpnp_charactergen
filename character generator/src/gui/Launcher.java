@@ -39,12 +39,12 @@ public class Launcher extends JFrame{
     private void setUpGUI(){
         setUpAllCards();
         container = new JPanel(new CardLayout());
-        container.add(demographicsCard, DEMOGRAPHICSCARD);
-        container.add(specialCard, SPECIALCARD);
-        container.add(traitCard, TRAITCARD);
-        container.add(perkCard, PERKCARD);
-        container.add(inventoryCard, INVENTORYCARD);
-        container.add(viewCard, VIEWCARD);
+        container.add(demographicsCard, CARD_IDS[0]);
+        container.add(specialCard, CARD_IDS[1]);
+        container.add(traitCard, CARD_IDS[2]);
+        container.add(perkCard, CARD_IDS[3]);
+        container.add(inventoryCard, CARD_IDS[4]);
+        container.add(viewCard, CARD_IDS[5]);
 
         setCardLayoutTo(DEMOGRAPHICSCARD);
         this.add(container);

@@ -14,9 +14,6 @@ public class Main {
             if (arg.equalsIgnoreCase("consoleui")){
                 //
             }
-            else {
-                new Launcher();
-            }
         }
         //new Launcher();
         new ShitLauncher();

@@ -37,20 +37,12 @@ public class Character {
     private int age = 15;
     private int[] SPECIAL = new int[]{5,5,5,5,5,5,5};
     private Race race = Race.HUMAN;
-    private ArrayList<Trait> traits = new ArrayList<Trait>(2);
-    private ArrayList<Skill> tagSkills = new ArrayList<Skill>();
-    private HashMap<Skill, Integer> skills = new HashMap<Skill, Integer>();
-    private ArrayList<Perk> perks = new ArrayList<Perk>();
+    private ArrayList<Trait> traits = new ArrayList<>(2);
+    private ArrayList<Skill> tagSkills = new ArrayList<>();
+    private HashMap<Skill, Integer> skills = new HashMap<>();
+    private ArrayList<Perk> perks = new ArrayList<>();
 
     //the rest is calculated from input
-
-    /**
-     * Parameterless constructor for quickies.
-     */
-    public Character(){
-        calculateSkillScores();
-    }
-
     /**
      * Quickie-Character generator - takes all the required information and makes a character from that.
      * all other values to be assigned by setters.
@@ -62,6 +54,40 @@ public class Character {
         this.name = name;
         this.SPECIAL = SPECIAL;
         calculateSkillScores();
+    }
+
+    /**
+     * Full Character Generator
+     * @param name the characters name
+     * @param backstory The character's backstory
+     * @param gender The character's Gender
+     * @param XP The amount of XP the character has
+     * @param karma The Character's karma
+     * @param caps How many caps the character has
+     * @param age Character's Age
+     * @param SPECIAL The array of numbers representing the character's SPECIAL
+     * @param race The character's Race
+     * @param traits The list of Traits the character has (3, unless the character has a perk or trait noting otherwise)
+     * @param tagSkills The tagged skills the character has
+     * @param skills The hashmap of Skills, Values
+     * @param perks The list of perks
+     */
+    public Character(String name, String backstory, Gender gender, int XP, int karma, int caps, int age, int[] SPECIAL,
+                     Race race, ArrayList<Trait> traits, ArrayList<Skill> tagSkills, HashMap<Skill, Integer> skills,
+                     ArrayList<Perk> perks) {
+        this.name = name;
+        this.backstory = backstory;
+        this.gender = gender;
+        this.XP = XP;
+        this.karma = karma;
+        this.caps = caps;
+        this.age = age;
+        this.SPECIAL = SPECIAL;
+        this.race = race;
+        this.traits = traits;
+        this.tagSkills = tagSkills;
+        this.skills = skills;
+        this.perks = perks;
     }
 
     public void setSkills(HashMap<Skill, Integer> skills) {
@@ -192,6 +218,16 @@ public class Character {
 
             skills.put(s, skillScore);
         }
+        calculateSkillScoresPostTraits();
+        calculateSkillScoresPostPerks();
+    }
+
+    private void calculateSkillScoresPostTraits() {
+
+    }
+
+    private void calculateSkillScoresPostPerks() {
+
     }
 
     public int calculateSkillPoints(){
@@ -218,10 +254,10 @@ public class Character {
     }
 
     public int calculateLevel(){
+        if (XP == 0) return 1; //dont check; they're level 1.
         double threshold = 0;
         double tempXP = XP; //it has a rounding error if you don't make it a double.
         for (int i = 1; i < XP;i++){
-            if (tempXP == 0) return 1; //dont check; they're level 1.
             if (tempXP / ((threshold == 0)?1:threshold) <= 1.0){
                 return i;
             }
@@ -231,33 +267,46 @@ public class Character {
     }
 
     public int calculateArmorClass(){
-        return SPECIAL[Statistic.AGILITY.index];
+        int ac = SPECIAL[Statistic.AGILITY.index];
+        ac += (traits.contains(Trait.VAT_SKIN)?10:0);
+        if (traits.contains(Trait.KAMIKAZE)){
+            return 0;
+        }
+        return ac;
     }
 
     public int calculateActionPoints(){
+        int ap = 0;
         switch (SPECIAL[Statistic.AGILITY.index]){
             case 1:
-                return 5;
+                ap += 5;
             case 2:
             case 3:
-                return 6;
+                ap += 6;
             case 4:
             case 5:
-                return 7;
+                ap += 7;
             case 6:
             case 7:
-                return 8;
+                ap += 8;
             case 8:
             case 9:
-                return 9;
+                ap += 9;
             case 10:
-                return 10;
+                ap += 10;
             default:
-                return 10;
+                ap += 10;
         }
+        if (traits.contains(Trait.BRUISER)){
+            ap -= 2;
+        }
+        return ap;
     }
 
     public int calculateCarryWeight(){
+        if (traits.contains(Trait.SMALL_FRAME)){
+            return 25 + (15 * SPECIAL[Statistic.STRENGTH.index]);
+        }
         return 25 + (25 * SPECIAL[Statistic.STRENGTH.index]);
     }
 
@@ -267,12 +316,17 @@ public class Character {
         else {
             damage = SPECIAL[Statistic.STRENGTH.index] - 5;
         }
-        damage = damage + ((race == Race.DEATHCLAW)?5:0);
+        damage += ((race == Race.DEATHCLAW)?5:0);
+        damage += (traits.contains(Trait.HEAVY_HANDED)?4:0);
+        damage -= (traits.contains(Trait.DOMESTICATED)?-2:0);
         return damage;
     }
 
     public int calculatePoisonResistance(){
         int pResist = 5 * SPECIAL[Statistic.ENDURANCE.index];
+        if (traits.contains(Trait.FAST_METABOLISM)){
+            pResist = 0;
+        }
         if (race == Race.GHOUL) pResist += 30;
         else if (race == Race.SUPER_MUTANT) pResist += 20;
         else if (race == Race.HALF_MUTANT) pResist += 15;
@@ -324,11 +378,21 @@ public class Character {
     }
 
     public int calculateHealingRate(){
-        if (SPECIAL[Statistic.ENDURANCE.index] < 6) return 1;
-        else if (SPECIAL[Statistic.ENDURANCE.index] < 9 && SPECIAL[Statistic.ENDURANCE.index] >= 6 ) return 2;
-        else if (SPECIAL[Statistic.ENDURANCE.index] < 10 && SPECIAL[Statistic.ENDURANCE.index] >= 9 ) return 3;
+        int hr = 0;
+        if (SPECIAL[Statistic.ENDURANCE.index] < 6) {
+            hr += 1;
+        }
+        else if (SPECIAL[Statistic.ENDURANCE.index] < 9 && SPECIAL[Statistic.ENDURANCE.index] >= 6 ){
+            hr += 2;
+        }
+        else if (SPECIAL[Statistic.ENDURANCE.index] >= 9 ) {
+            hr += 3;
+        }
         else if (race == Race.ROBOT) return 0;
-        else return 4;
+        if (traits.contains(Trait.FAST_METABOLISM)){
+            hr += 2;
+        }
+        return hr;
     }
 
     public int calculateCritChance(){
@@ -338,9 +402,9 @@ public class Character {
     @Override
     public String toString(){
 
-        String header = String.format("%-21s \nLevel %-2s %s %s\nCaps: %-23s\nXP: %-7s | HP: %-3s | AP: %-2s\nCrit Chance:%-2s | Sequence: %s\n",
+        String header = String.format("%-21s \nLevel %-2s %s %s\nCaps: %-23s\nXP: %-7s | HP: %-3s | AP: %-2s\nCrit Chance:%-2s | Sequence: %s\nHealing Rate: %s\n",
                 name, calculateLevel(),race.getName(),((gender==Gender.MALE || gender == Gender.FEMALE)?gender.toString():""),
-                caps, XP, calculateHitPoints(), calculateActionPoints(), calculateCritChance(), calculateSequence());
+                caps, XP, calculateHitPoints(), calculateActionPoints(), calculateCritChance(), calculateSequence(),calculateHealingRate());
 
         String special = "=SPECIAL======================\n";
         for (Statistic s: Statistic.values()){
@@ -374,12 +438,12 @@ public class Character {
 
         String trait = "=TRAITS=======================\n";
         for (Trait t : traits){
-            trait = String.format("%s%-28s\n",trait,t.name);
+            trait = String.format("%s%-28s\n  %s\n",trait,t.name,t.getShortHandDesc());
         }
 
         String perk = "=PERKS========================\n";
         for (Perk p : perks){
-            perk = String.format("%s%s - %s\n",perk,p.getName(),p.getShorthand());
+            perk = String.format("%s%s\n",perk,p.getName());
         }
         return String.format("%s%s%s%s%s%s%s",header, special, skillset, resistances, inventory, trait, perk).toUpperCase();
     }

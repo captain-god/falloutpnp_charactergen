@@ -1,7 +1,7 @@
 package data.character;
 
 /**
- * I wish Enums would enumerate. But that would be too much, wouldn't it?
+ * Quick Enum of all the Statistics (SPECIAL) in the game.
  */
 public enum Statistic {
     STRENGTH(0),

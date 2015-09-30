@@ -5,8 +5,6 @@ import data.character.Character;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
@@ -29,10 +27,15 @@ public class ShitLauncher extends JFrame{
     private JPanel tagsCheckPanel;
     private JButton buildButton;
     private JComboBox<Character.Gender> genderComboBox;
-    private ArrayList<Skill> taggedSkills = new ArrayList<>();
+    private JPanel traitsPanel;
 
-    private JSpinner[] spinners = new JSpinner[]{strengthSpinner,perceptionSpinner,enduranceSpinner,charismaSpinner,
+    private ArrayList<Skill> taggedSkills = new ArrayList<>();
+    private ArrayList<Trait> traits = new ArrayList<>();
+
+    private JSpinner[] statisticSpinners = new JSpinner[]{strengthSpinner,perceptionSpinner,enduranceSpinner,charismaSpinner,
     intelligenceSpinner,agilitySpinner,luckSpinner};
+    private ArrayList<JCheckBox> tagCheckBoxes = new ArrayList<>();
+    private ArrayList<JCheckBox> traitCheckBoxes = new ArrayList<>();
 
     public ShitLauncher(){
         super("Fallout Character Generator");
@@ -51,6 +54,7 @@ public class ShitLauncher extends JFrame{
     private void buildContents(){
         populateAllFields();
         buildTags();
+        buildTraits();
         setUpBuildButton();
     }
 
@@ -76,6 +80,7 @@ public class ShitLauncher extends JFrame{
         raceComboBox.addActionListener(e -> {
             updateRaceInfoTab((Race) raceComboBox.getSelectedItem());
             updateSpinners((Race) raceComboBox.getSelectedItem());
+            buildTraits();
         });
     }
 
@@ -100,7 +105,7 @@ public class ShitLauncher extends JFrame{
     }
 
     /**
-     * Updates the spinners on the GUI when the race cbx is changed.
+     * Updates the statisticSpinners on the GUI when the race cbx is changed.
      * since this is basically illegible, allow me to clarify:
      * new SpinnerNumberModel(start, max, min, step);
      * start = this race's maximum score + minimum score / 2 (the average)
@@ -129,20 +134,55 @@ public class ShitLauncher extends JFrame{
             JCheckBox c = new JCheckBox(s.getName());
             c.addActionListener(e -> {
                 //these are checked /after/ the box is updated, so if it looks weird, it's fine.
-                if (!c.isSelected()){
+                if (!c.isSelected()) {
                     taggedSkills.remove(s);
-                }
-                else{
-                    if (taggedSkills.size() >= 3){
+                } else {
+                    if (taggedSkills.size() >= 3) {
                         c.setSelected(false);
-                    }
-                    else{
+                    } else {
                         taggedSkills.add(s);
                     }
                 }
             });
-            tagsCheckPanel.add(c, (i/2)-1);
+            tagsCheckPanel.add(c, (i / 2) - 1);
+            tagCheckBoxes.add(c);
             i++;
+        }
+    }
+
+    private void buildTraits(){
+        traitsPanel.removeAll();
+        traitsPanel.setLayout(new GridLayout(Trait.values().length, 1));
+        int i = 0;
+        for (Trait trait : Trait.values()){
+            JCheckBox c = new JCheckBox(trait.toString());
+            c.setToolTipText(trait.getShortHandDesc());
+            c.addActionListener(e -> {
+                //these are checked /after/ the box is updated, so if it looks weird, it's fine.
+                if (!c.isSelected()) {
+                    traits.remove(trait);
+                } else {
+                    if (traits.size() >= 2) {
+                        c.setSelected(false);
+                    } else {
+                        traits.add(trait);
+                    }
+                }
+            });
+
+            boolean doesExist = false;
+            if (trait.getRaceRestrict() != null) {
+                for (Race r : trait.getRaceRestrict()) {
+                    if (r.equals(raceComboBox.getSelectedItem())) {
+                        doesExist = true;
+                    }
+                }
+            }
+            if (!doesExist){
+                traitsPanel.add(c, (i / 2) - 1);
+                traitCheckBoxes.add(c);
+                i++;
+            }
         }
     }
 
@@ -153,6 +193,7 @@ public class ShitLauncher extends JFrame{
         character.setSPECIAL(getSpecial());
         character.setTagSkills(taggedSkills);
         character.setGender((Character.Gender)genderComboBox.getSelectedItem());
+        character.setTraits(traits);
 
         JTextArea t = new JTextArea(character.toString(),50,50);
         t.setFont(new Font("Consolas",Font.PLAIN,12));
@@ -162,7 +203,7 @@ public class ShitLauncher extends JFrame{
     private int[] getSpecial(){
         int[] special = new int[7];
         for (int i = 0; i < 7;i++){
-            special[i] = (int)spinners[i].getValue();
+            special[i] = (int) statisticSpinners[i].getValue();
         }
         return special;
     }
