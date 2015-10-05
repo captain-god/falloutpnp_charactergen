@@ -36,6 +36,7 @@ public class Character {
     private int caps = 0;
     private int age = 15;
     private int[] SPECIAL = new int[]{5,5,5,5,5,5,5};
+    private int[] postSpecial = SPECIAL;
     private Race race = Race.HUMAN;
     private ArrayList<Trait> traits = new ArrayList<>(2);
     private ArrayList<Skill> tagSkills = new ArrayList<>();
@@ -121,6 +122,7 @@ public class Character {
     public void addPerk(Perk toAdd){
         this.perks.add(toAdd);
     }
+
     public String getBackstory() {
         return backstory;
     }
@@ -206,14 +208,13 @@ public class Character {
     public boolean isValidCharacter(){
         boolean isValid = true;
 
-        //perform some checks here
 
         return isValid;
     }
 
     public void calculateSkillScores(){
         for(Skill s : Skill.values()){
-            int multiplier = (s.getSecondaryStat() != null) ? this.SPECIAL[s.getPrimaryStat().index] + this.SPECIAL[s.getSecondaryStat().index] : this.SPECIAL[s.getPrimaryStat().index] ;
+            int multiplier = (s.getSecondaryStat() != null) ? postSpecial[s.getPrimaryStat().index] + postSpecial[s.getSecondaryStat().index] : postSpecial[s.getPrimaryStat().index] ;
             int skillScore = s.getBase() + (s.getMultiplier() * (multiplier)) + (tagSkills.contains(s) ? 20:0);
 
             skills.put(s, skillScore);
@@ -223,7 +224,50 @@ public class Character {
     }
 
     private void calculateSkillScoresPostTraits() {
+        //+20% First Aid, Doctor, Speech, Barter; -10% Small Guns, Big Guns, Energy Weapons, Unarmed, and Melee Weapons
+        if (traits.contains(Trait.GOOD_NATURED)) {
+            skills.replace(Skill.FIRST_AID, skills.get(Skill.FIRST_AID) + 20);
+            skills.replace(Skill.DOCTOR, skills.get(Skill.DOCTOR) + 20);
+            skills.replace(Skill.SPEECH, skills.get(Skill.SPEECH) + 20);
+            skills.replace(Skill.BARTER, skills.get(Skill.BARTER) + 20);
+            skills.replace(Skill.SMALL_GUNS, skills.get(Skill.SMALL_GUNS) - 10);
+            skills.replace(Skill.BIG_GUNS, skills.get(Skill.BIG_GUNS) - 10);
+            skills.replace(Skill.ENERGY_WEAPONS, skills.get(Skill.ENERGY_WEAPONS) - 10);
+            skills.replace(Skill.UNARMED, skills.get(Skill.UNARMED) - 10);
+            skills.replace(Skill.MELEE_WEAPONS, skills.get(Skill.MELEE_WEAPONS) - 10);
+        }
 
+        //all skills +10%
+        if (traits.contains(Trait.SKILLED)){
+            for (Skill s : Skill.values()){
+                skills.replace(s, skills.get(s) + 10);
+            }
+        }
+
+        //all skills -10%
+        if (traits.contains(Trait.GIFTED)){
+            for (Skill s : Skill.values()){
+                skills.replace(s, skills.get(s) - 10);
+            }
+        }
+
+        //+15% Science, Repair, Lockpick
+        if (traits.contains(Trait.TECH_WIZARD)){
+            skills.replace(Skill.SCIENCE, skills.get(Skill.SCIENCE) + 15);
+            skills.replace(Skill.REPAIR, skills.get(Skill.REPAIR) + 15);
+            skills.replace(Skill.LOCKPICK, skills.get(Skill.LOCKPICK) + 15);
+        }
+
+        //"+25% Unarmed; -20% Small Guns, First Aid, Doctor, Repair, Science, and Lockpick
+        if (traits.contains(Trait.HAM_FISTED)) {
+            skills.replace(Skill.UNARMED, skills.get(Skill.UNARMED) + 25);
+            skills.replace(Skill.SMALL_GUNS, skills.get(Skill.SMALL_GUNS) - 20);
+            skills.replace(Skill.FIRST_AID, skills.get(Skill.FIRST_AID) - 20);
+            skills.replace(Skill.DOCTOR, skills.get(Skill.DOCTOR) - 20);
+            skills.replace(Skill.REPAIR, skills.get(Skill.REPAIR) - 20);
+            skills.replace(Skill.SCIENCE, skills.get(Skill.SCIENCE) - 20);
+            skills.replace(Skill.LOCKPICK, skills.get(Skill.LOCKPICK) - 20);
+        }
     }
 
     private void calculateSkillScoresPostPerks() {
@@ -231,7 +275,7 @@ public class Character {
     }
 
     public int calculateSkillPoints(){
-        return 5 + (2 * SPECIAL[Statistic.INTELLIGENCE.index]);
+        return 5 + (2 * postSpecial[Statistic.INTELLIGENCE.index]);
     }
 
     public int calculateSkillCost(int score){
@@ -245,11 +289,11 @@ public class Character {
 
     public int calculateHitPoints(){
         //calculate hp for any race
-        int hp = 15 + (SPECIAL[Statistic.STRENGTH.index] + (2 * SPECIAL[Statistic.ENDURANCE.index]));
+        int hp = 15 + (postSpecial[Statistic.STRENGTH.index] + (2 * postSpecial[Statistic.ENDURANCE.index]));
         //add bonus if deathclaw or super mutant
         hp = hp + ((this.race == Race.DEATHCLAW || this.race == Race.SUPER_MUTANT)? 2 * calculateLevel():0);
         //add bonus for each level
-        hp = hp + (3 + (this.SPECIAL[Statistic.ENDURANCE.index]/2) * calculateLevel());
+        hp = hp + (3 + (this.postSpecial[Statistic.ENDURANCE.index]/2) * calculateLevel());
         return hp;
     }
 
@@ -267,7 +311,7 @@ public class Character {
     }
 
     public int calculateArmorClass(){
-        int ac = SPECIAL[Statistic.AGILITY.index];
+        int ac = postSpecial[Statistic.AGILITY.index];
         ac += (traits.contains(Trait.VAT_SKIN)?10:0);
         if (traits.contains(Trait.KAMIKAZE)){
             return 0;
@@ -277,7 +321,7 @@ public class Character {
 
     public int calculateActionPoints(){
         int ap = 0;
-        switch (SPECIAL[Statistic.AGILITY.index]){
+        switch (postSpecial[Statistic.AGILITY.index]){
             case 1:
                 ap += 5;
             case 2:
@@ -305,16 +349,16 @@ public class Character {
 
     public int calculateCarryWeight(){
         if (traits.contains(Trait.SMALL_FRAME)){
-            return 25 + (15 * SPECIAL[Statistic.STRENGTH.index]);
+            return 25 + (15 * postSpecial[Statistic.STRENGTH.index]);
         }
-        return 25 + (25 * SPECIAL[Statistic.STRENGTH.index]);
+        return 25 + (25 * postSpecial[Statistic.STRENGTH.index]);
     }
 
     public int calculateMeleeDamage(){
         int damage;
-        if (SPECIAL[Statistic.STRENGTH.index] < 7) damage = 1;
+        if (postSpecial[Statistic.STRENGTH.index] < 7) damage = 1;
         else {
-            damage = SPECIAL[Statistic.STRENGTH.index] - 5;
+            damage = postSpecial[Statistic.STRENGTH.index] - 5;
         }
         damage += ((race == Race.DEATHCLAW)?5:0);
         damage += (traits.contains(Trait.HEAVY_HANDED)?4:0);
@@ -323,7 +367,7 @@ public class Character {
     }
 
     public int calculatePoisonResistance(){
-        int pResist = 5 * SPECIAL[Statistic.ENDURANCE.index];
+        int pResist = 5 * postSpecial[Statistic.ENDURANCE.index];
         if (traits.contains(Trait.FAST_METABOLISM)){
             pResist = 0;
         }
@@ -336,7 +380,7 @@ public class Character {
     }
 
     public int calculateRadiationResistance(){
-        int radResist = 2 * SPECIAL[Statistic.ENDURANCE.index];
+        int radResist = 2 * postSpecial[Statistic.ENDURANCE.index];
         if (race == Race.GHOUL) radResist += 80;
         else if (race == Race.SUPER_MUTANT) radResist += 50;
         else if (race == Race.HALF_MUTANT) radResist += 15;
@@ -370,22 +414,25 @@ public class Character {
         int damResistance = 0;
         if (race == Race.ROBOT || race == Race.DEATHCLAW) damResistance = 40;
         else if (race == Race.SUPER_MUTANT) damResistance = 25;
+        damResistance = damResistance * (traits.contains(Trait.TIGHT_NUTS)? 2:1);
         return damResistance;
     }
 
     public int calculateSequence(){
-        return 2 * SPECIAL[Statistic.PERCEPTION.index];
+        int sequence = 2 * postSpecial[Statistic.PERCEPTION.index];
+        sequence = sequence + (traits.contains(Trait.KAMIKAZE)? 5 : 0);
+        return sequence;
     }
 
     public int calculateHealingRate(){
         int hr = 0;
-        if (SPECIAL[Statistic.ENDURANCE.index] < 6) {
+        if (postSpecial[Statistic.ENDURANCE.index] < 6) {
             hr += 1;
         }
-        else if (SPECIAL[Statistic.ENDURANCE.index] < 9 && SPECIAL[Statistic.ENDURANCE.index] >= 6 ){
+        else if (postSpecial[Statistic.ENDURANCE.index] < 9 && postSpecial[Statistic.ENDURANCE.index] >= 6 ){
             hr += 2;
         }
-        else if (SPECIAL[Statistic.ENDURANCE.index] >= 9 ) {
+        else if (postSpecial[Statistic.ENDURANCE.index] >= 9 ) {
             hr += 3;
         }
         else if (race == Race.ROBOT) return 0;
@@ -396,19 +443,48 @@ public class Character {
     }
 
     public int calculateCritChance(){
-        return SPECIAL[Statistic.LUCK.index];
+        int critChance = postSpecial[Statistic.LUCK.index];
+        critChance = critChance + (traits.contains(Trait.FINESSE)? 10 : 0);
+        return critChance;
+    }
+
+    public int[] calculatePostPerkTraitSpecial(){
+        int[]pSpecial = SPECIAL;
+
+        //traits
+        if(traits.contains(Trait.BRUISER)){
+            pSpecial[Statistic.STRENGTH.index] = pSpecial[Statistic.STRENGTH.index] + 2;
+        }
+
+        if(traits.contains(Trait.GIFTED)){
+            for (Statistic s : Statistic.values()){
+                pSpecial[s.index] = pSpecial[s.index] + 1;
+            }
+        }
+
+        if(traits.contains(Trait.TECH_WIZARD)){
+            pSpecial[Statistic.PERCEPTION.index] -= 1;
+        }
+
+        if(traits.contains(Trait.DOMESTICATED)){
+            pSpecial[Statistic.INTELLIGENCE.index] += 1;
+        }
+
+        //Perks
+
+        return pSpecial;
     }
 
     @Override
     public String toString(){
-
+        postSpecial = calculatePostPerkTraitSpecial();
         String header = String.format("%-21s \nLevel %-2s %s %s\nCaps: %-23s\nXP: %-7s | HP: %-3s | AP: %-2s\nCrit Chance:%-2s | Sequence: %s\nHealing Rate: %s\n",
                 name, calculateLevel(),race.getName(),((gender==Gender.MALE || gender == Gender.FEMALE)?gender.toString():""),
                 caps, XP, calculateHitPoints(), calculateActionPoints(), calculateCritChance(), calculateSequence(),calculateHealingRate());
 
         String special = "=SPECIAL======================\n";
         for (Statistic s: Statistic.values()){
-            special = special + String.format("%-3s: %-23s||\n",s.toString().substring(0, 3),SPECIAL[s.index]);
+            special = special + String.format("%-3s: %-23s||\n",s.toString().substring(0, 3),postSpecial[s.index]);
             //include logic to check for enhancements from armor or gear
         }
 

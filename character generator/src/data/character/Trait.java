@@ -34,7 +34,7 @@ public enum Trait {
 
     FAST_SHOT("Fast Shot",
             "You don't have time for a targeted attack, because you attack faster than normal people. It costs you one less action point to use a weapon. You cannot perform targeted shots, but all weapons take one less action point to use. Note that the Fast Shot trait has no effect on HtH or Melee attacks. Animals cannot choose this trait.",
-            "-1AP per shot, Cannot target shots", new Race[]{Race.DEATHCLAW, Race.DOG}),
+            "-1AP per shot; Cannot target shots", new Race[]{Race.DEATHCLAW, Race.DOG}),
 
     BLOODY_MESS("Bloody Mess",
             "By some strange twist of fate, people around you die violently. You always see the worst way a person can die. This does not mean you kill them any faster or slower, but when they do die, it will be dramatic. Just how dramatic is up to the Gamemaster.",

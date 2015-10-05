@@ -28,6 +28,7 @@ public class ShitLauncher extends JFrame{
     private JButton buildButton;
     private JComboBox<Character.Gender> genderComboBox;
     private JPanel traitsPanel;
+    private JButton resetButton;
 
     private ArrayList<Skill> taggedSkills = new ArrayList<>();
     private ArrayList<Trait> traits = new ArrayList<>();
@@ -158,7 +159,7 @@ public class ShitLauncher extends JFrame{
             JCheckBox c = new JCheckBox(trait.toString());
             c.setToolTipText(trait.getShortHandDesc());
             c.addActionListener(e -> {
-                //these are checked /after/ the box is updated, so if it looks weird, it's fine.
+                //these are checked /after/ the box is updated, so it looks weird
                 if (!c.isSelected()) {
                     traits.remove(trait);
                 } else {
