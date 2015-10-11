@@ -8,9 +8,9 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * The shitty launcher that I made in IntelliJ that's 'landlocked'
+ * The shitty launcher that I made in IntelliJ that's 'landlocked' by the gui editor.
  */
-public class ShitLauncher extends JFrame{
+public class ShittyLauncher extends JFrame{
     private data.character.Character character = new Character("Snoop", new int[]{5,5,5,5,5,5,5});
     private JPanel container;
     private JTextField nameTextField;
@@ -38,7 +38,7 @@ public class ShitLauncher extends JFrame{
     private ArrayList<JCheckBox> tagCheckBoxes = new ArrayList<>();
     private ArrayList<JCheckBox> traitCheckBoxes = new ArrayList<>();
 
-    public ShitLauncher(){
+    public ShittyLauncher(){
         super("Fallout Character Generator");
         setSize(600,400);
         setResizable(false);
@@ -57,6 +57,30 @@ public class ShitLauncher extends JFrame{
         buildTags();
         buildTraits();
         setUpBuildButton();
+        setUpResetButton();
+    }
+
+    private void resetContents(){
+        character = new Character("Snoop", new int[]{5,5,5,5,5,5,5});
+        raceComboBox.setSelectedIndex(0);
+        genderComboBox.setSelectedIndex(0);
+
+        resetTraits();
+        resetTags();
+    }
+
+    private void resetTags() {
+        for (JCheckBox c : tagCheckBoxes){
+            c.setSelected(false);
+        }
+        taggedSkills = new ArrayList<>();
+    }
+
+    private void resetTraits(){
+        for (JCheckBox c : traitCheckBoxes){
+            c.setSelected(false);
+        }
+        traits = new ArrayList<>();
     }
 
     /**
@@ -86,6 +110,7 @@ public class ShitLauncher extends JFrame{
     }
 
     private void setUpGenderComboBox(){
+        genderComboBox.removeAllItems();
         for (Character.Gender g : Character.Gender.values()){
             genderComboBox.addItem(g);
         }
@@ -93,6 +118,10 @@ public class ShitLauncher extends JFrame{
 
     private void setUpBuildButton(){
         buildButton.addActionListener(e -> buildCharacter());
+    }
+
+    private void setUpResetButton(){
+        resetButton.addActionListener(e -> resetContents());
     }
 
     /**

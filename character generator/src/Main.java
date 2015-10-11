@@ -1,5 +1,3 @@
-package brain;
-
 import gui.*;
 
 /**
@@ -16,6 +14,6 @@ public class Main {
             }
         }
         //new Launcher();
-        new ShitLauncher();
+        new ShittyLauncher();
     }
 }

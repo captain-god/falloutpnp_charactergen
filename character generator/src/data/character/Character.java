@@ -324,22 +324,29 @@ public class Character {
         switch (postSpecial[Statistic.AGILITY.index]){
             case 1:
                 ap += 5;
+                break;
             case 2:
             case 3:
                 ap += 6;
+                break;
             case 4:
             case 5:
                 ap += 7;
+                break;
             case 6:
             case 7:
                 ap += 8;
+                break;
             case 8:
             case 9:
                 ap += 9;
+                break;
             case 10:
                 ap += 10;
+                break;
             default:
                 ap += 10;
+                break;
         }
         if (traits.contains(Trait.BRUISER)){
             ap -= 2;
