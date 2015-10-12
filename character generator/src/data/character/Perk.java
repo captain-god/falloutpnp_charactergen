@@ -110,7 +110,7 @@ public enum Perk {
             "With this perk, you gain double the normal hit points when you go up a level. Only Deathclaws can choose this perk.",
             1,
             "Strength 7, Endurance 5",
-            8,  new Race[]{Race.GHOUL, Race.DOG, Race.HALF_MUTANT, Race.HUMAN, Race.ROBOT, Race.SUPER_MUTANT}),
+            8, new Race[]{Race.GHOUL, Race.DOG, Race.HALF_MUTANT, Race.HUMAN, Race.ROBOT, Race.SUPER_MUTANT}),
 
     CANCEROUS_GROWTH("Cancerous Growth",
             "The radiation has mutated you so badly that you thrive in the wastes. You gain a +2 bonus to your healing rate, and can regenerate a crippled limb in 48 hours. Only Ghouls can choose this perk.",
@@ -146,7 +146,7 @@ public enum Perk {
             "Your senses are very well developed. You gain a +2 bonus to Perception in the dark, and penalties for light levels are reduced by 50%. You also gain a 25% bonus to detecting enemies who are sneaking around. Only Deathclaws can choose this perk.",
             1,
             "Intelligence 5",
-            4,  new Race[]{Race.GHOUL, Race.DOG, Race.HALF_MUTANT, Race.HUMAN, Race.ROBOT, Race.SUPER_MUTANT}),
+            4, new Race[]{Race.GHOUL, Race.DOG, Race.HALF_MUTANT, Race.HUMAN, Race.ROBOT, Race.SUPER_MUTANT}),
 
     DEMOLITION_EXPERT("Demolition Expert",
             "Your character has learned how to handle explosives like a pro. For characters that like to blow things up, there is nothing better than this perk. Explosives set by this character do 50% more damage and will always detonate on time. Deathclaws and Dogs cannot choose this perk.",
@@ -320,7 +320,7 @@ public enum Perk {
             "Your battle-weary flesh has hardened into an armor of its own. You gain +15% to all resistances except for fire. Only Deathclaws can choose this perk.",
             2,
             "Endurance 6",
-            10,  new Race[]{Race.GHOUL, Race.DOG, Race.HALF_MUTANT, Race.HUMAN, Race.ROBOT, Race.SUPER_MUTANT}),
+            10, new Race[]{Race.GHOUL, Race.DOG, Race.HALF_MUTANT, Race.HUMAN, Race.ROBOT, Race.SUPER_MUTANT}),
 
     HIT_THE_DECK("Hit the Deck!",
             "You react very quickly to the sound of an explosive coming your way. You only take half damage from ranged explosive weapons by increasing your Explosive DR by 50%. This includes damage from concussion and shrapnel.",
@@ -632,7 +632,7 @@ public enum Perk {
             "Venom has seeped into your claws. All of your unarmed attacks carry a Type B poison. Only Deathclaws can choose this perk.",
             1,
             "Unarmed 60%, Strength 6",
-            12,  new Race[]{Race.GHOUL, Race.DOG, Race.HALF_MUTANT, Race.HUMAN, Race.ROBOT, Race.SUPER_MUTANT}),
+            12, new Race[]{Race.GHOUL, Race.DOG, Race.HALF_MUTANT, Race.HUMAN, Race.ROBOT, Race.SUPER_MUTANT}),
 
     TEAM_PLAYER("Team Player",
             "You have learned the basic skills of teamwork and sharing. Good for you! Whenever all members of the party are within 10 hexes of your character, he or she gains +10% to all skills.",
@@ -674,9 +674,7 @@ public enum Perk {
             "This perk adds +3 Strength for the purposes of strength requirements for handling and firing weapons.",
             1,
             "Agility 5",
-            2),
-
-    ;
+            2),;
     String name;
     String description;
     String requirements;
@@ -684,7 +682,7 @@ public enum Perk {
     int ranks;
     Race[] raceRestrict;
 
-    Perk(String name, String desc, int ranks, String requirements, int levelRequirement){
+    Perk(String name, String desc, int ranks, String requirements, int levelRequirement) {
         this.name = name;
         this.description = desc;
         this.ranks = ranks;
@@ -692,7 +690,7 @@ public enum Perk {
         this.levelRequirement = levelRequirement;
     }
 
-    Perk(String name, String desc, int ranks, String requirements, int levelRequirement, Race[] raceRestrict){
+    Perk(String name, String desc, int ranks, String requirements, int levelRequirement, Race[] raceRestrict) {
         this.name = name;
         this.description = desc;
         this.ranks = ranks;
@@ -726,7 +724,7 @@ public enum Perk {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.name;
     }
 }

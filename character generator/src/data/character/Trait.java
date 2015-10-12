@@ -18,7 +18,7 @@ public enum Trait {
 
     ONE_HANDER("One-Hander",
             "One of your hands is very dominant. You excel with single-handed weapons, but two-handed weapons cause a problem. You have a 40% penalty to hit with two-handed weapons, but get a 20% bonus to hit with weapons that only require one hand. Animals cannot choose this trait.",
-            "-40% to 2-Handed weapons, +20% to 1-handed weapons", new Race[]{Race.DEATHCLAW, Race.DOG} ),
+            "-40% to 2-Handed weapons, +20% to 1-handed weapons", new Race[]{Race.DEATHCLAW, Race.DOG}),
 
     FINESSE("Finesse",
             "Your attacks show a lot of finesse. You don't do as much damage, but you cause more critical hits. All of your attacks lose 30% of their damage (after reductions are made for Damage Resistance, etc.) but you gain a 10% bonus to Critical Chance.",
@@ -46,11 +46,11 @@ public enum Trait {
 
     GOOD_NATURED("Good Natured",
             "You studied less-combative skills as you were growing up. Your combat skills start at a lower level, but First Aid, Doctor, Speech, and Barter are substantially improved. Those skills get a 20% bonus. You get a 10% penalty to starting combat skills (Small Guns, Big Guns, Energy Weapons, Unarmed, and Melee Weapons). This is a one-time bonus. Animals and robots cannot choose this trait.",
-            "+20% First Aid, Doctor, Speech, Barter; -10% Small Guns, Big Guns, Energy Weapons, Unarmed, and Melee Weapons",  new Race[]{Race.DEATHCLAW, Race.DOG, Race.ROBOT}),
+            "+20% First Aid, Doctor, Speech, Barter; -10% Small Guns, Big Guns, Energy Weapons, Unarmed, and Melee Weapons", new Race[]{Race.DEATHCLAW, Race.DOG, Race.ROBOT}),
 
     CHEM_RELIANT("Chem Reliant",
             "You are more easily addicted to chems. Your chance to be addicted is twice normal, but you recover in half the time from their ill effects. Robots cannot choose this trait.",
-            "Half recovery time from chems, twice as likely to become addicted",  new Race[]{Race.ROBOT}),
+            "Half recovery time from chems, twice as likely to become addicted", new Race[]{Race.ROBOT}),
 
     CHEM_RESISTANT("Chem Resistant",
             "Chems only effect you half as long as normal, but your chance to be addicted is only 50% the normal amount. Robots cannot choose this trait.",
@@ -106,15 +106,15 @@ public enum Trait {
 
     TARGETING_COMPUTER("Targeting Computer",
             "You have been programmed with an onboard targeting computer. All attacks cost 1 extra AP to perform, but you can always add +15% to your chance to-hit. Only Robots can choose this trait.",
-            "+15% Chance-to-hit; +1 AP per attack",  new Race[]{Race.GHOUL, Race.DOG, Race.DEATHCLAW, Race.HUMAN, Race.HALF_MUTANT, Race.SUPER_MUTANT}),
+            "+15% Chance-to-hit; +1 AP per attack", new Race[]{Race.GHOUL, Race.DOG, Race.DEATHCLAW, Race.HUMAN, Race.HALF_MUTANT, Race.SUPER_MUTANT}),
 
     EMP_SHIELDING("EMP Shielding",
             "You have a dedicated EMP shielding system. It takes you 2 AP to move 1 hex because of your heavy equipment, but you have a 30% Resistance to all forms of EMP attack. Only Robots can choose this trait.",
-            "+30% EMP resistance; +2AP per move",  new Race[]{Race.GHOUL, Race.DOG, Race.DEATHCLAW, Race.HUMAN, Race.HALF_MUTANT, Race.SUPER_MUTANT}),
+            "+30% EMP resistance; +2AP per move", new Race[]{Race.GHOUL, Race.DOG, Race.DEATHCLAW, Race.HUMAN, Race.HALF_MUTANT, Race.SUPER_MUTANT}),
 
     BETA_SOFTWARE("Beta Software",
             "You have been equipped with an experimental operating system and peripherals. You get 1 extra Tag Skill, but whenever using ANY tag skill, you must roll against Luck or suffer an automatic failure and, in combat, a loss of all APs for that round. Only Robots can choose this trait.",
-            "+1 Tag Skill; Luck Roll to fail when using a Tag Skill",  new Race[]{Race.GHOUL, Race.DOG, Race.DEATHCLAW, Race.HUMAN, Race.HALF_MUTANT, Race.SUPER_MUTANT});
+            "+1 Tag Skill; Luck Roll to fail when using a Tag Skill", new Race[]{Race.GHOUL, Race.DOG, Race.DEATHCLAW, Race.HUMAN, Race.HALF_MUTANT, Race.SUPER_MUTANT});
 
     String name;
     String description;

@@ -14,7 +14,7 @@ public enum Statistic {
 
     int index;
 
-    Statistic(int i){
+    Statistic(int i) {
         this.index = i;
     }
 
